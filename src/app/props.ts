@@ -19,10 +19,10 @@ export interface ExperienceItem {
   }[];
 }
 
-export const SOCIAL_NETWORK_LINKS: Record<SocialNetworkType, string> = {
+export const SOCIAL_NETWORK_LINKS: Partial<Record<SocialNetworkType, string>> = {
   linkedin: 'https://linkedin.com/in/thinhtran98/',
-  github: 'https://github.com/jimodayne',
-  telegram: 'https://t.me/jimcbl',
+  github: 'https://github.com/jimcbl',
+  // telegram: 'https://t.me/jimcbl',
   unsplash: 'https://unsplash.com/@jimcbl',
   instagram: 'https://instagram.com/jimcbl/',
 };

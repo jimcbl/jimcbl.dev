@@ -74,3 +74,47 @@ Paste BibTeX entries exported from Google Scholar, Zotero, or your reference man
 
 Run `npm run test:publications` to check parsing and field mapping (Node.js 22.18+),
 and `npm run build` to verify the homepage. Invalid entries fail with an error naming the citation key.
+
+
+### Development compilation troubleshooting
+
+Development uses Webpack (`npm run dev`). To explicitly try Turbopack, use
+`npm run dev:turbo`. Production builds still use the default Next.js bundler.
+
+If the terminal repeats `EMFILE: too many open files, watch` or continually
+restarts after reporting configuration changes, stop the dev server and run
+`npm run dev:poll` on macOS/Linux. This uses polling instead of native Watchpack
+file notifications. It can use more CPU, so prefer ordinary dev mode when native
+watching works.
+
+`next.config.mjs` explicitly limits the Turbopack and file-tracing roots to this
+project. A lockfile in a parent directory must not turn the entire home directory
+into the Next.js workspace.
+
+## Photography and Unsplash
+
+The photos page requests the latest 24 uploads from `@jimcbl` on the server and
+revalidates hourly. Set `UNSPLASH_ACCESS_KEY` in `.env.local` for local development
+and in the Vercel project’s environment variables for production, then redeploy.
+Use an Unsplash application Access Key, not its Secret Key; never prefix it with
+`NEXT_PUBLIC_` or commit it. The key is sent only to the Unsplash API in a server-side
+authorization header.
+
+If the key is absent, the API times out, or a rate limit is reached, the page shows
+the existing selection from `src/app/photos/props.ts`. Photos use Unsplash’s CDN
+URLs directly with attribution and links back to their Unsplash pages. The page
+uses hourly regeneration, so a newly uploaded photo may take up to an hour (plus
+the next page request and regeneration) to appear in production.
+
+Run `node --test tests/unsplash.test.mjs` to verify photo mapping, request options,
+and failure handling without using real credentials.
+
+
+### Editing photo captions
+
+Edit `content/photo-captions.json`, keyed by the Unsplash photo ID. Each entry has
+`caption` for the visible text and an optional `alt` for photos missing an Unsplash
+description. Existing descriptive alt text is preserved. Captions stay attached
+to the correct image when the latest-photo feed changes order. New photos use
+their Unsplash description or alt text until a custom caption is added here.
+These edits affect the website gallery; they do not modify your Unsplash account.

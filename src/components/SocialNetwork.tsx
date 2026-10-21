@@ -4,7 +4,7 @@ import { FaLinkedin, FaGithub, FaTelegram, FaUnsplash, FaInstagram } from 'react
 import cn from 'classnames';
 import { capitalize } from '@/utils';
 
-const socialIcons: Record<SocialNetworkType, IconType> = {
+const socialIcons: Partial<Record<SocialNetworkType, IconType>> = {
   linkedin: FaLinkedin,
   github: FaGithub,
   telegram: FaTelegram,
@@ -24,6 +24,9 @@ export const SocialNetworkIcons = (props: SocialNetworkIconsProps) => {
   return (
     <div className={cn(className, 'socialNetworkIcons flex gap-4 py-2 flex-wrap', { isResponsive })}>
       {Object.entries(socialIcons).map(([key, Icon]) => {
+        if (!SOCIAL_NETWORK_LINKS[key as SocialNetworkType]) {
+          return null;
+        }
         return (
           <a key={key} title={capitalize(key)} target="_blank" href={SOCIAL_NETWORK_LINKS[key as SocialNetworkType]}>
             <Icon

@@ -1,92 +1,132 @@
-import { createApi } from 'unsplash-js';
-import { IPhoto, photos } from './props';
-import { Suspense } from 'react';
-import { SOCIAL_NETWORK_LINKS } from '../props';
+import type { Metadata } from 'next';
+import Image from 'next/image';
+import { photos as archive } from './props';
+import { garamond } from '../font';
+import { fetchLatestPhotos, galleryPhotos, applyPhotoCaptions, UNSPLASH_PROFILE } from '@/lib/unsplash';
+import styles from './page.module.css';
+import photoCaptions from '../../../content/photo-captions.json';
 
-const getData = async (): Promise<IPhoto[]> => {
-  //   const unsplash = createApi({
-  //     accessKey: process.env.UNSPLASH_ACCESS_KEY || '',
-  //   });
-
-  //   unsplash.users.getPhotos({ username: 'jimcbl' }).then((result) => {
-  //     if (result.errors) {
-  //       //   console.log('error occurred: ', result.errors[0]);
-  //       throw new Error('Failed to fetch data');
-  //     }
-
-  //     console.log('result.response.results >> ', result.response.results);
-  //     return result.response.results;
-  //   });
-  //   setTimeout(() => {
-  return new Promise((resolve) =>
-    setTimeout(() => {
-      resolve(photos as IPhoto[]);
-    }, 2000)
-  );
+export const metadata: Metadata = {
+  title: 'Photography | Thinh Tran',
+  description:
+    'Photographs and everyday moments by Thinh Tran, who has lived in Vietnam and Finland and is now based in France.',
 };
 
-const Photo = async () => {
-  const data = await getData();
+export const revalidate = 3600;
 
-  const splitIntoColumns = (arr: IPhoto[], columns: number) => {
-    const res: any = [];
-    for (let i = 0; i < arr.length; i++) {
-      const column = i % columns;
-      if (res[column]) {
-        res[column].push(arr[i]);
-      } else {
-        res[column] = [arr[i]];
-      }
-    }
-    return res as IPhoto[][];
-  };
-
-  const threeColumns = splitIntoColumns(data, 3);
-
-  //   if (!data) {
-  //     return <h1>Loading...</h1>;
-  //   }
+export default async function Photos() {
+  const latest = await fetchLatestPhotos(process.env.UNSPLASH_ACCESS_KEY);
+  const photos = applyPhotoCaptions(latest ?? galleryPhotos(archive), photoCaptions);
 
   return (
-    <div className="pb-8">
-      <h1 className="font-bold text-3xl">Photo</h1>
-      <p className="py-5 text-sm">
-        Here are some of my photos. You can find more on my{' '}
-        <a target="_blank" href={SOCIAL_NETWORK_LINKS.unsplash}>
-          <span className="underline font-bold decoration-sky-400 transition duration-300 hover:decoration-sky-600">
-            Unsplash
-          </span>
-        </a>
-        .
-      </p>
-      <Suspense fallback={<div>Loading ... </div>}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {threeColumns.map((column, index) => (
-            <div key={index} className="grid flex-wrap gap-6 content-start">
-              {column.map((photo) => (
-                <a title={photo.alt_description} key={photo.id} target="_blank" href={photo.links.html}>
-                  <img
-                    className="hover:scale-[102%] duration-300 ease-in-out transition-all"
-                    src={photo.urls.regular}
-                    loading="lazy"
-                    alt={photo.alt_description}
-                  />
-                </a>
-              ))}
-            </div>
-          ))}
-        </div>
-
-        <div className="text-center md:pt-4 pt-8">
-          <a href="https://unsplash.com/@jimcbl" target="_blank" rel="noreferrer">
-            <button className="bg-slate-900 hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 text-white font-semibold h-12 px-6 rounded-lg  dark:bg-sky-500 dark:highlight-white/20 dark:hover:bg-sky-400">
-              More on Unsplash
-            </button>
+    <div className={styles.page}>
+      <header className={styles.intro}>
+        <div>
+          <p className="eyebrow">Photography / Life beyond the screen</p>
+          <h1 className={garamond.className}>
+            A different lens<span className="accent">.</span>
+          </h1>
+          <p className={styles.lead}>Places, people, and everyday moments I’ve noticed along the way.</p>
+          <p className={styles.story}>
+            I’ve lived in Vietnam and Finland, and I’m now based in France. Photography gives me a reason to slow down
+            and look a little closer at the places I call home and those I visit.
+          </p>
+          <a className="text-link" href={UNSPLASH_PROFILE} target="_blank" rel="noopener noreferrer">
+            Find me on Unsplash <span aria-hidden="true">↗</span>
           </a>
         </div>
-      </Suspense>
+        <aside className={styles.places} aria-labelledby="places-heading">
+          <p className="eyebrow" id="places-heading">
+            Places I’ve called home
+          </p>
+          <ol>
+            <li>
+              <span className={garamond.className}>Vietnam</span>
+              <span>Bao Loc</span>
+            </li>
+            <li>
+              <span className={garamond.className}>Finland</span>
+              <span>Lahti</span>
+            </li>
+            <li>
+              <span className={garamond.className}>France</span>
+              <span>
+                <span className="status-dot" />
+                Now · Brest
+              </span>
+            </li>
+          </ol>
+        </aside>
+      </header>
+
+      <section aria-labelledby="gallery-heading">
+        <div className={styles.galleryHeader}>
+          <div>
+            <p className="eyebrow">Through my lens</p>
+            <h2 id="gallery-heading" className={garamond.className}>
+              {latest ? 'Recent photographs' : 'Selected photographs'}
+            </h2>
+            <p className={styles.galleryIntro}>
+              {latest ? 'Recent uploads from my Unsplash.' : 'A selection from my photo archive.'} Open a photograph to
+              see it on Unsplash.
+            </p>
+          </div>
+          <span className={styles.count}>{photos.length} photographs</span>
+        </div>
+        <p className={styles.credit}>
+          Photography by{' '}
+          <a href={UNSPLASH_PROFILE} target="_blank" rel="noopener noreferrer">
+            Thinh Tran
+          </a>{' '}
+          on{' '}
+          <a
+            href="https://unsplash.com/?utm_source=jimcbl.dev&utm_medium=referral"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Unsplash
+          </a>
+          .
+        </p>
+        {photos.length ? (
+          <div className={styles.gallery}>
+            {photos.map((photo, index) => (
+              <figure className={styles.photo} key={photo.id}>
+                <a
+                  href={photo.photoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${photo.caption} (opens on Unsplash in a new tab)`}
+                >
+                  <div className={styles.imageFrame}>
+                    <Image
+                      src={photo.imageUrl}
+                      alt={photo.alt}
+                      width={photo.width}
+                      height={photo.height}
+                      unoptimized
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      className={styles.image}
+                    />
+                  </div>
+                  <figcaption>
+                    <span>{photo.caption}</span>
+                    <span aria-hidden="true">↗</span>
+                  </figcaption>
+                </a>
+              </figure>
+            ))}
+          </div>
+        ) : (
+          <p className={styles.empty}>You can explore my photographs on Unsplash.</p>
+        )}
+        <div className={styles.more}>
+          <p>There’s more to see.</p>
+          <a className="primary-link" href={UNSPLASH_PROFILE} target="_blank" rel="noopener noreferrer">
+            More on Unsplash <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </section>
     </div>
   );
-};
-
-export default Photo;
+}

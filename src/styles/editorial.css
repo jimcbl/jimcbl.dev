@@ -37,7 +37,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .hero-role { color: var(--forest); font-size: 20px; }
 .hero-description { max-width: 500px; line-height: 1.8; font-size: 18px; color: var(--muted); margin-top: 20px; }
 .hero-links { display: flex; flex-wrap: wrap; align-items: center; gap: 28px; margin-top: 32px; }
-.primary-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; background: var(--forest); color: var(--canvas); font-size: 13px; font-weight: 700; padding: 15px 20px; border-radius: 4px; transition: background .2s; }
+.primary-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; background: var(--forest); color: var(--canvas); font-size: 14px; font-weight: 700; padding: 15px 20px; border-radius: 4px; transition: background .2s; }
 .primary-link:hover { background: var(--accent); }
 .text-link { display: inline-flex; gap: 12px; align-items: center; font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: underline; text-underline-offset: 5px; text-decoration-color: transparent; }
 .text-link:hover { text-decoration-color: currentColor; }
