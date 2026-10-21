@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/global.css';
 import '@/styles/main.scss';
+import '@/styles/editorial.css';
 import { lato } from './font';
 import dayjs from 'dayjs';
 import Footer from '@/components/layout/Footer';
@@ -33,9 +34,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={'bg-white dark:bg-slate-900 relative ' + lato.className}>
+      <body className={'site-body relative ' + lato.className}>
         <Navbar />
-        <main className="dark:text-gray-300 max-w-screen-xl mx-auto px-10 lg:px-24 lg:mt-24">{children}</main>
+        <main className="site-main">{children}</main>
         <Footer />
       </body>
     </html>

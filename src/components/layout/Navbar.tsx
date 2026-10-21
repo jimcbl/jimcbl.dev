@@ -1,65 +1,19 @@
-'use client';
-
-import useScroll from '@/hooks/useScroll';
-import useScrollPosition from '@/hooks/useScrollPosition';
-import LightDarkButton from '../LightDarkButton';
 import Link from 'next/link';
+import LightDarkButton from '../LightDarkButton';
 
-const Navbar = () => {
-  const scroll = useScroll();
-  const scrollPos = useScrollPosition();
-
-  let classScroll = '';
-
-  if (scrollPos < 86) {
-    classScroll = 'translate-y-0';
-  } else {
-    if (scroll === 'down') {
-      classScroll = '-translate-y-full down';
-    } else {
-      classScroll = 'translate-y-0 up';
-    }
-  }
-
-  const handleScrollTop = (e: any) => {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  };
-
+export default function Navbar() {
   return (
-    <nav
-      id="navbar"
-      className={
-        'w-full navbar dark:ring-slate-100/25 ring-slate-900/5 bg-white z-20 relative dark:bg-slate-900 dark:text-slate-300 lg:top-0 px-6 pt-6 lg:px-0  lg:pt-6 lg:pb-6 lg:fixed lg:transition lg:duration-200  ' +
-        classScroll
-      }
-    >
-      <div className="container mx-auto max-w-screen-xl justify-end items-center lg:px-24 hidden lg:flex">
-        <ul className="flex justify-between font-bold text-lg gap-8">
-          <li className="transition duration-200">
-            <Link href="/#navbar">home</Link>
-          </li>
-          {/* <li className="transition duration-200">
-            <Link href="/#projects">projects</Link>
-          </li> */}
-          <li className="transition duration-200">
-            <Link href="/photos">photos</Link>
-          </li>
-          <li className="transition duration-200">
-            <Link href="/contact">contact</Link>
-          </li>
-        </ul>
+    <header className="site-header">
+      <nav id="navbar" className="site-nav" aria-label="Main navigation">
+        <Link className="site-wordmark" href="/" aria-label="Thinh Tran home">tt<span>.</span></Link>
+        <div className="site-nav-links">
+          <Link href="/#about">About</Link>
+          <Link href="/#publications">Publications</Link>
+          <Link href="/photos">Photos</Link>
+          <Link href="/contact">Contact</Link>
+        </div>
         <LightDarkButton />
-      </div>
-      <div className="flex lg:hidden items-center justify-end">
-        {/* <FaBars size={24} /> */}
-        <LightDarkButton />
-      </div>
-    </nav>
+      </nav>
+    </header>
   );
-};
-
-export default Navbar;
+}

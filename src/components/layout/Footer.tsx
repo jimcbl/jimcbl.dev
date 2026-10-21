@@ -1,18 +1,11 @@
-import dayjs from 'dayjs';
 import { SocialNetworkIcons } from '../SocialNetwork';
 
-const Footer = () => {
+export default function Footer() {
   return (
-    <footer className=" bg-slate-200 dark:bg-slate-800 dark:text-slate-300 p-8 lg:p-12 ">
-      <div className="copyright text-sm text-center dark:text-slate-400 ">
-        <div className="text-center flex justify-center mb-2">
-          <SocialNetworkIcons />
-        </div>
-        <p> © {dayjs().year()} Duc Thinh Tran. All rights reserved.</p>
-        {/* <p> </p> */}
-      </div>
+    <footer className="site-footer">
+      <p>© {new Date().getFullYear()} Duc Thinh Tran</p>
+      <p>Research, software & everything in between.</p>
+      <SocialNetworkIcons size={18} />
     </footer>
   );
-};
-
-export default Footer;
+}
