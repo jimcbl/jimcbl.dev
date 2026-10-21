@@ -18,6 +18,12 @@ declare module 'dayjs' {
 
 export const metadata: Metadata = {
   title: 'Jim Tran',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml', sizes: 'any' },
+      { url: '/favicon.png', type: 'image/png', sizes: '16x16' },
+    ],
+  },
   openGraph: {
     type: 'profile',
     images: ['https://jimcbl.dev/opengraph-image.jpg'],
