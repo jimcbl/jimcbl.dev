@@ -15,6 +15,10 @@ This is my personal website, built with Next.js for the framework and Tailwind C
 
 ## Running Locally
 
+Use Node.js 24 (`nvm use` reads `.nvmrc`). The `engines.node` setting in
+`package.json` selects Node.js 24.x for Vercel deployments; GitHub Actions uses
+the same major version through `.nvmrc`.
+
 1. First, clone the repository:
 
 ```bash
